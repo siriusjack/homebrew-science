@@ -7,7 +7,7 @@ require "formula"
 class Kvs < Formula
   homepage "https://code.google.com/p/kvs/"
   url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
-  sha1 ""
+  sha1 "ba1ce51cecdb499a520fe6c4e6f6edf9f45a00d3"
 
   depends_on "cmake" => :build
   # depends_on :x11 # if your formula requires any X11/XQuartz components
