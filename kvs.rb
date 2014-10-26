@@ -10,10 +10,11 @@ class Kvs < Formula
   sha1 ""
 
   depends_on "cmake" => :build
-  # depends_on :x11 # if your formula requires any X11/XQuartz components
-  depends_on "freeglut" => :recommended
-  depends_on "glew" => :recommended
+  depends_on "freeglut"
+  depends_on "glew"
   depends_on "qt" => :optional
+  option "with-qt", "enable kvsSupportQT"
+  option "with-cuda", "enable kvsSupportCUDA"
 
   def install
     # ENV.deparallelize  # if your formula fails when building in parallel
@@ -26,11 +27,13 @@ class Kvs < Formula
     # system "cmake", ".", *std_cmake_args
     # system "make", "install" # if this fails, try separate make/make install steps
     mkdir 'install'
-    mkdir 'build' do
-      system "cmake", ".."
-      system "make"
-      system "make", "install"
-    end
+    # mkdir 'build' do
+    #   system "cmake", ".."
+    #   system "make"
+    #   system "make", "install"
+    # end
+    system "cmake", *std_cmake_args
+    system "make", "install"
   end
 
   test do
