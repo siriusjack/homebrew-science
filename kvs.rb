@@ -2,13 +2,19 @@ require "formula"
 
 class Kvs < Formula
   homepage "https://code.google.com/p/kvs/"
-  url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.2.tar.gz"
+  url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
   # sha1 "ba1ce51cecdb499a520fe6c4e6f6edf9f45a00d3"
 
+  # dependencies
   depends_on "cmake" => :build
   depends_on "freeglut"
   depends_on "glew"
+  depends_on "opencv" => :optional
   depends_on "qt" => :optional
+
+  # options
+  option "debug", "Build with debug options"
+  option "with-opencv", "enable kvsSupoprtOpenCV"
   option "with-qt", "enable kvsSupportQT"
   #option "with-cuda", "enable kvsSupportCUDA"
 
@@ -16,9 +22,14 @@ class Kvs < Formula
     args = std_cmake_args + %W[
       -DKVS_SUPPORT_GLUT='ON'
     ]
+
+    if build.with? "opencv"
+      args << '-DKVS_SUPPORT_OPENCV=ON'
+    end
     if build.with? "qt" or build.with? "qt5"
       args << '-DKVS_SUPPORT_QT=ON'
     end
+
     
     mkdir 'install'
     system "cmake", *args
