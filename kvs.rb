@@ -1,9 +1,5 @@
 require "formula"
 
-# Documentation: https://github.com/Homebrew/homebrew/wiki/Formula-Cookbook
-#                /usr/local/Library/Contributions/example-formula.rb
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
-
 class Kvs < Formula
   homepage "https://code.google.com/p/kvs/"
   url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
@@ -17,22 +13,15 @@ class Kvs < Formula
   option "with-cuda", "enable kvsSupportCUDA"
 
   def install
-    # ENV.deparallelize  # if your formula fails when building in parallel
-
-    # Remove unrecognized options if warned by configure
-    # system "./configure", "--disable-debug",
-    #                       "--disable-dependency-tracking",
-    #                       "--disable-silent-rules",
-    #                       "--prefix=#{prefix}"
-    # system "cmake", ".", *std_cmake_args
-    # system "make", "install" # if this fails, try separate make/make install steps
+    args = std_cmake_args + %W[
+      -DKVS_SUPPORT_GLUT
+    ]
+    if build.with? "qt" or build.with? "qt5"
+      args << '-DKVS_SUPPORT_QT'
+    end
+    
     mkdir 'install'
-    # mkdir 'build' do
-    #   system "cmake", ".."
-    #   system "make"
-    #   system "make", "install"
-    # end
-    system "cmake", *std_cmake_args
+    system "cmake", *args
     system "make", "install"
   end
 
