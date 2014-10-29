@@ -22,7 +22,11 @@ class Kvs < Formula
     args = std_cmake_args + %W[
       -DKVS_SUPPORT_GLUT='ON'
     ]
-
+    if build.with? "debug"
+      args << 'DDEBUG=ON'
+    else
+      args << 'DDEBUG=OFF'
+    end
     if build.with? "opencv"
       args << '-DKVS_SUPPORT_OPENCV=ON'
     end
