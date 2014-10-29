@@ -10,14 +10,14 @@ class Kvs < Formula
   depends_on "glew"
   depends_on "qt" => :optional
   option "with-qt", "enable kvsSupportQT"
-  option "with-cuda", "enable kvsSupportCUDA"
+  #option "with-cuda", "enable kvsSupportCUDA"
 
   def install
     args = std_cmake_args + %W[
-      -DKVS_SUPPORT_GLUT
+      -DKVS_SUPPORT_GLUT='ON'
     ]
     if build.with? "qt" or build.with? "qt5"
-      args << '-DKVS_SUPPORT_QT'
+      args << '-DKVS_SUPPORT_QT=ON'
     end
     
     mkdir 'install'
