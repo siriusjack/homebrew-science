@@ -23,9 +23,9 @@ class Kvs < Formula
       -DKVS_SUPPORT_GLUT='ON'
     ]
     if build.with? "debug"
-      args << 'DDEBUG=ON'
+      args << '-DDEBUG=ON'
     else
-      args << 'DDEBUG=OFF'
+      args << '-DDEBUG=OFF'
     end
     if build.with? "opencv"
       args << '-DKVS_SUPPORT_OPENCV=ON'
