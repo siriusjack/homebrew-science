@@ -41,18 +41,20 @@ class Kvs < Formula
   def install
     # build & install
     if build.with? "debug" or "debug_and_release"
-      args = std_cmake_args
+      # args = std_cmake_args
+      args = "-DCMAKE_INSTALL_PREFIX='#{prefix}'"
+      args << ' -DCMAKE_BUILD_TYPE=debug'
+      args << ' -DDEBUG=ON'
       args = add_optional_args(args)
-      args << '-DDEBUG=ON'
-      args << '-DCMAKE_BUILD_TYPE=debug'
       system "cmake", *args
       system "make", "install"
     end
     if build.with? "release" or "debug_and_release"
-      args = std_cmake_args
+      # args = std_cmake_args
+      args = "-DCMAKE_INSTALL_PREFIX='#{prefix}'"
+      args << ' -DCMAKE_BUILD_TYPE=release'
+      args << ' -DRELEASE=ON'
       args = add_optional_args(args)
-      args << '-DRELEASE=ON'
-      args << '-DCMAKE_BUILD_TYPE=release'
       system "cmake", *args
       system "make", "install"
     end
