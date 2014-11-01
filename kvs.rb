@@ -1,8 +1,31 @@
 require "formula"
 
+
+def build_install_debug
+  args = std_cmake_args
+  # fixed: https://github.com/Homebrew/homebrew/issues/8022
+  # args = " -DCMAKE_INSTALL_PREFIX='#{prefix}'"
+  args << '-DCMAKE_BUILD_TYPE=debug'
+  args << '-DDEBUG=ON'
+  args = add_optional_args(args)
+  system "cmake", *args
+  system "make", "install"
+end
+
+def build_install_release
+  args = std_cmake_args
+  # args = "-DCMAKE_INSTALL_PREFIX='#{prefix}'"
+  args << '-DCMAKE_BUILD_TYPE=release'
+  args << '-DRELEASE=ON'
+  args = add_optional_args(args)
+  system "cmake", *args
+  system "make", "install"
+end
+
 class Kvs < Formula
   homepage "https://code.google.com/p/kvs/"
-  url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
+  # url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
+  url "file:///Users/yoshihiro/dev/kvs-2.3.0.tar.gz"
   # url "https://dl.dropboxusercontent.com/u/19518526/kvs-2.3.0.tar.gz"
   # sha1 "ba1ce51cecdb499a520fe6c4e6f6edf9f45a00d3"
   
@@ -14,14 +37,13 @@ class Kvs < Formula
   depends_on "qt" => :optional
 
   # options
-  option "debug_and_release" "--Default"
-  option "debug", "Build with debug options"
-  option "release", "Build with release option"
+  option "debug-and-release", "Build both debug and release build: *Default"
+  option "debug"
+  option "release"
 
   option "with-opencv", "enable kvsSupoprtOpenCV"
   option "with-qt", "enable kvsSupportQT"
   #option "with-cuda", "enable kvsSupportCUDA"
-
 
   def add_optional_args(args)
     # set optional flags
@@ -34,29 +56,17 @@ class Kvs < Formula
     if build.with? "qt" or build.with? "qt5"
       args << '-DKVS_SUPPORT_QT=ON'
     end
-    return  args
+    return args
   end
 
-
   def install
-    # build & install
-    if build.with? "debug" or "debug_and_release"
-      # args = std_cmake_args
-      args = "-DCMAKE_INSTALL_PREFIX='#{prefix}'"
-      args << ' -DCMAKE_BUILD_TYPE=debug'
-      args << ' -DDEBUG=ON'
-      args = add_optional_args(args)
-      system "cmake", *args
-      system "make", "install"
-    end
-    if build.with? "release" or "debug_and_release"
-      # args = std_cmake_args
-      args = "-DCMAKE_INSTALL_PREFIX='#{prefix}'"
-      args << ' -DCMAKE_BUILD_TYPE=release'
-      args << ' -DRELEASE=ON'
-      args = add_optional_args(args)
-      system "cmake", *args
-      system "make", "install"
+    if build.include? "debug"
+      build_install_debug()
+    elsif build.include? "release"
+      build_install_release()
+    else # default: 
+      build_install_debug()
+      build_install_release()
     end
   end
 
