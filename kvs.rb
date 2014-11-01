@@ -2,10 +2,10 @@ require "formula"
 
 class Kvs < Formula
   homepage "https://code.google.com/p/kvs/"
-  # url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
-  url "https://dl.dropboxusercontent.com/u/19518526/kvs-2.3.0.tar.gz"
+  url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
+  # url "https://dl.dropboxusercontent.com/u/19518526/kvs-2.3.0.tar.gz"
   # sha1 "ba1ce51cecdb499a520fe6c4e6f6edf9f45a00d3"
-
+  
   # dependencies
   depends_on "cmake" => :build
   depends_on "freeglut"
@@ -14,19 +14,19 @@ class Kvs < Formula
   depends_on "qt" => :optional
 
   # options
+  option "debug_and_release" "--Default"
   option "debug", "Build with debug options"
+  option "release", "Build with release option"
+
   option "with-opencv", "enable kvsSupoprtOpenCV"
   option "with-qt", "enable kvsSupportQT"
   #option "with-cuda", "enable kvsSupportCUDA"
 
-  def install
-    args = std_cmake_args + %W[
-      -DKVS_SUPPORT_GLUT='ON'
-    ]
-    if build.with? "debug"
-      args << '-DDEBUG=ON'
-    else
-      args << '-DDEBUG=OFF'
+
+  def add_optional_args(args)
+    # set optional flags
+    if true
+      args << 'DKVS_SUPPORT_GLUT=ON'
     end
     if build.with? "opencv"
       args << '-DKVS_SUPPORT_OPENCV=ON'
@@ -34,11 +34,26 @@ class Kvs < Formula
     if build.with? "qt" or build.with? "qt5"
       args << '-DKVS_SUPPORT_QT=ON'
     end
+    return  args
+  end
 
-    
-    mkdir 'install'
-    system "cmake", *args
-    system "make", "install"
+
+  def install
+    # build & install
+    if build.with? "debug" or "debug_and_release"
+      args = std_cmake_args
+      args = add_optional_args(args)
+      args << '-DDEBUG=ON'
+      system "cmake", *args
+      system "make", "install"
+    end
+    if build.with? "release" or "debug_and_release"
+      args = std_cmake_args
+      args = add_optional_args(args)
+      args << '-DRELEASE=ON'
+      system "cmake", *args
+      system "make", "install"
+    end
   end
 
   test do
