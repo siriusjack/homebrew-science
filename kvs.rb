@@ -44,6 +44,7 @@ class Kvs < Formula
       args = std_cmake_args
       args = add_optional_args(args)
       args << '-DDEBUG=ON'
+      args << '-DCMAKE_BUILD_TYPE=debug'
       system "cmake", *args
       system "make", "install"
     end
@@ -51,6 +52,7 @@ class Kvs < Formula
       args = std_cmake_args
       args = add_optional_args(args)
       args << '-DRELEASE=ON'
+      args << '-DCMAKE_BUILD_TYPE=release'
       system "cmake", *args
       system "make", "install"
     end
