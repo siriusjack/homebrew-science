@@ -1,27 +1,5 @@
 require "formula"
 
-
-def build_install_debug
-  args = std_cmake_args
-  # fixed: https://github.com/Homebrew/homebrew/issues/8022
-  # args = " -DCMAKE_INSTALL_PREFIX='#{prefix}'"
-  args << '-DCMAKE_BUILD_TYPE=debug'
-  args << '-DDEBUG=ON'
-  args = add_optional_args(args)
-  system "cmake", *args
-  system "make", "install"
-end
-
-def build_install_release
-  args = std_cmake_args
-  # args = "-DCMAKE_INSTALL_PREFIX='#{prefix}'"
-  args << '-DCMAKE_BUILD_TYPE=release'
-  args << '-DRELEASE=ON'
-  args = add_optional_args(args)
-  system "cmake", *args
-  system "make", "install"
-end
-
 class Kvs < Formula
   homepage "https://code.google.com/p/kvs/"
   # url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
@@ -57,6 +35,27 @@ class Kvs < Formula
       args << '-DKVS_SUPPORT_QT=ON'
     end
     return args
+  end
+
+  def build_install_debug
+    args = std_cmake_args
+    # fixed: https://github.com/Homebrew/homebrew/issues/8022
+    # args = " -DCMAKE_INSTALL_PREFIX='#{prefix}'"
+    args << '-DCMAKE_BUILD_TYPE=debug'
+    args << '-DDEBUG=ON'
+    args = add_optional_args(args)
+    system "cmake", *args
+    system "make", "install"
+  end
+
+  def build_install_release
+    args = std_cmake_args
+    # args = "-DCMAKE_INSTALL_PREFIX='#{prefix}'"
+    args << '-DCMAKE_BUILD_TYPE=release'
+    args << '-DRELEASE=ON'
+    args = add_optional_args(args)
+    system "cmake", *args
+    system "make", "install"
   end
 
   def install
