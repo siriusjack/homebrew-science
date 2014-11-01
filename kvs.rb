@@ -26,7 +26,7 @@ class Kvs < Formula
   def add_optional_args(args)
     # set optional flags
     if true
-      args << 'DKVS_SUPPORT_GLUT=ON'
+      args << '-DKVS_SUPPORT_GLUT=ON'
     end
     if build.with? "opencv"
       args << '-DKVS_SUPPORT_OPENCV=ON'
