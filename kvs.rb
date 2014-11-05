@@ -2,7 +2,7 @@ require "formula"
 
 class Kvs < Formula
   homepage "https://code.google.com/p/kvs/"
-  url "https://dl.dropboxusercontent.com/u/19518526/kvs-2.3.0.tar.gz"
+  url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.3.0.tar.gz"
   # sha1 "ba1ce51cecdb499a520fe6c4e6f6edf9f45a00d3"
   
   # dependencies
@@ -13,7 +13,7 @@ class Kvs < Formula
   depends_on "qt" => :optional
 
   # options
-  option "debug-and-release", "Build both debug and release build: *Default"
+  option "debug-and-release", "Build both debug and release build (Default)"
   option "debug"
   option "release"
 
@@ -22,6 +22,8 @@ class Kvs < Formula
   #option "with-cuda", "enable kvsSupportCUDA"
 
   def add_optional_args(args)
+    # notify cmake that brew is compiling kvs
+    args << '-DKVS_BUILD_BY=homebrew'
     # set optional flags
     if true
       args << '-DKVS_SUPPORT_GLUT=ON'
