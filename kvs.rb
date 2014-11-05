@@ -16,14 +16,12 @@ class Kvs < Formula
   option "debug-and-release", "Build both debug and release build (Default)"
   option "debug"
   option "release"
-
   option "with-opencv", "enable kvsSupoprtOpenCV"
   option "with-qt", "enable kvsSupportQT"
+  option "without-tools", "install kvstools"
   #option "with-cuda", "enable kvsSupportCUDA"
 
   def add_optional_args(args)
-    # notify cmake that brew is compiling kvs
-    args << '-DKVS_BUILD_BY=homebrew'
     # set optional flags
     if true
       args << '-DKVS_SUPPORT_GLUT=ON'
@@ -33,6 +31,9 @@ class Kvs < Formula
     end
     if build.with? "qt" or build.with? "qt5"
       args << '-DKVS_SUPPORT_QT=ON'
+    end
+    if build.include? "without-tools"
+      args << '-DKVS_TOOL=OFF'
     end
     return args
   end
@@ -45,6 +46,7 @@ class Kvs < Formula
     args << '-DDEBUG=ON'
     args = add_optional_args(args)
     system "cmake", *args
+    # system "make"
     system "make", "install"
   end
 
@@ -55,6 +57,7 @@ class Kvs < Formula
     args << '-DRELEASE=ON'
     args = add_optional_args(args)
     system "cmake", *args
+    # system "make"
     system "make", "install"
   end
 
