@@ -11,7 +11,6 @@ class Kvs < Formula
   depends_on "glew"
   depends_on "opencv" => :optional
   depends_on "qt" => :optional
-  depends_on "qt5" => :optional
 
   # options
   option "debug-and-release", "Build both debug and release build (Default)"
@@ -19,7 +18,6 @@ class Kvs < Formula
   option "release"
   option "with-opencv", "enable kvsSupoprtOpenCV"
   option "with-qt", "enable kvsSupportQT"
-  option "with-qt5", "enable kvsSupportQT5"
   option "without-tools", "install kvstools"
   #option "with-cuda", "enable kvsSupportCUDA"
 
@@ -31,14 +29,10 @@ class Kvs < Formula
     if build.with? "opencv"
       args << '-DKVS_SUPPORT_OPENCV=ON'
     end
-    if build.with? "qt5"
-      args << '-DKVS_SUPPORT_QT5=ON'
-      args << '-DCMAKE_PREFIX_PATH=/usr/local/opt/qt5'
-    end
     if build.with? "qt"
       args << '-DKVS_SUPPORT_QT=ON'
     end
-    if build.include? "without-tools"
+    if build.with? "without-tools"
       args << '-DKVS_TOOL=OFF'
     end
     return args
