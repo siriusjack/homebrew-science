@@ -21,6 +21,12 @@ class Kvs < Formula
   option "without-tools", "install kvstools"
   #option "with-cuda", "enable kvsSupportCUDA"
 
+  def add_cmake_args(args)
+    # args << '-DCMAKE_INSTALL_RPATH:STRING=#{lib}'
+    # args << '-DCMAKE_INSTALL_NAME_DIR:STRING=#{lib}'
+    return args
+  end
+
   def add_optional_args(args)
     # set optional flags
     if true
@@ -44,10 +50,12 @@ class Kvs < Formula
     # args = " -DCMAKE_INSTALL_PREFIX='#{prefix}'"
     args << '-DCMAKE_BUILD_TYPE=debug'
     args << '-DDEBUG=ON'
+    args = add_cmake_args(args)
     args = add_optional_args(args)
-    system "cmake", *args
-    # system "make"
-    system "make", "install"
+    mkdir "build" do
+      system "cmake",  "..", *args
+      system "make install"
+    end
   end
 
   def build_install_release
@@ -55,10 +63,12 @@ class Kvs < Formula
     # args = "-DCMAKE_INSTALL_PREFIX='#{prefix}'"
     args << '-DCMAKE_BUILD_TYPE=release'
     args << '-DRELEASE=ON'
+    args = add_cmake_args(args)
     args = add_optional_args(args)
-    system "cmake", *args
-    # system "make"
-    system "make", "install"
+    mkdir "build" do
+      system "cmake",  "..", *args
+      system "make install"
+    end
   end
 
   def install
