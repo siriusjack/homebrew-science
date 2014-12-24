@@ -46,7 +46,7 @@ class Kvs < Formula
     args << '-DCMAKE_BUILD_TYPE=debug'
     args << '-DDEBUG=ON'
     args = add_optional_args(args)
-    mkdir "build_dir" do
+    mkdir "build_debug" do
       system "cmake",  "..", *args
       system "make"
       system "make install"
@@ -59,7 +59,7 @@ class Kvs < Formula
     args << '-DCMAKE_BUILD_TYPE=release'
     args << '-DRELEASE=ON'
     args = add_optional_args(args)
-    mkdir "build_dir" do
+    mkdir "build_release" do
       system "cmake",  "..", *args
       system "make"
       system "make install"
