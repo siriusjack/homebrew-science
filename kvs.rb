@@ -11,6 +11,7 @@ class Kvs < Formula
   depends_on "glew"
   depends_on "opencv" => :optional
   depends_on "qt" => :optional
+  depends_on "qt5" => :optional
 
   # options
   option "debug-and-release", "Build both debug and release build (Default)"
@@ -18,9 +19,9 @@ class Kvs < Formula
   option "release"
   option "with-opencv", "enable kvsSupoprtOpenCV"
   option "with-qt", "enable kvsSupportQT"
+  option "with-qt5", "enable kvsSupportQT"
   option "without-tools", "install kvstools"
   #option "with-cuda", "enable kvsSupportCUDA"
-
 
   def add_optional_args(args)
     # set optional flags
@@ -31,6 +32,9 @@ class Kvs < Formula
       args << '-DKVS_SUPPORT_OPENCV=ON'
     end
     if build.with? "qt"
+      args << '-DKVS_SUPPORT_QT=ON'
+    end
+    if build.with? "qt5"
       args << '-DKVS_SUPPORT_QT=ON'
     end
     if build.with? "without-tools"
@@ -46,11 +50,11 @@ class Kvs < Formula
     args << '-DCMAKE_BUILD_TYPE=debug'
     args << '-DDEBUG=ON'
     args = add_optional_args(args)
+    # system "make"
     mkdir "build_debug" do
-      system "cmake",  "..", *args
-      system "make"
-      system "make install"
-    end
+      system "cmake", "..", *args
+      system "make", "install"
+    end 
   end
 
   def build_install_release
@@ -60,10 +64,9 @@ class Kvs < Formula
     args << '-DRELEASE=ON'
     args = add_optional_args(args)
     mkdir "build_release" do
-      system "cmake",  "..", *args
-      system "make"
-      system "make install"
-    end
+      system "cmake", "..", *args
+      system "make", "install"
+    end 
   end
 
   def install
