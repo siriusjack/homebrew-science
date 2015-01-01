@@ -80,6 +80,26 @@ class Kvs < Formula
     end
   end
 
+  def caveats
+    s = <<-EOS.undent
+      Print some important notice to the user when `brew info <formula>` is
+      called or when brewing a formula.
+      This is optional. You can use all the vars like #{version} here.
+    EOS
+
+    if build.with? "qt5" 
+      s += <<-EOS.undent
+
+        if you want to use find_papckage(Qt5XXXXX) in your cmake project, 
+        you should add -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5 to enable 
+        that feature.
+
+      EOS
+    end
+    #s += "Some issue only on older systems" if MacOS.version < :mountain_lion
+    s
+  end
+
   test do
     # `test do` will create, run in and delete a temporary directory.
     #
@@ -92,4 +112,5 @@ class Kvs < Formula
     # executables being tested: `system "#{bin}/program", "do", "something"`.
     system "false"
   end
+
 end
