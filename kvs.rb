@@ -81,10 +81,16 @@ class Kvs < Formula
   end
 
   def caveats
+    # s = <<-EOS.undent
+    #   Print some important notice to the user when `brew info <formula>` is
+    #   called or when brewing a formula.
+    #   This is optional. You can use all the vars like #{version} here.
+    # EOS
+    
     s = <<-EOS.undent
-      Print some important notice to the user when `brew info <formula>` is
-      called or when brewing a formula.
-      This is optional. You can use all the vars like #{version} here.
+        add the following line to your (.bashrc|.zshrc)
+        export KVS_DIR=/usr/local/opt/kvs
+        to enable kvs shader programs working properly
     EOS
 
     if build.with? "qt5" 
