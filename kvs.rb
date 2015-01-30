@@ -4,6 +4,10 @@ class Kvs < Formula
   homepage "https://code.google.com/p/kvs/"
   url "https://dl.dropboxusercontent.com/u/19518526/kvs/kvs-2.4.0.tar.gz"
   # sha1 "ba1ce51cecdb499a520fe6c4e6f6edf9f45a00d3"
+
+  if build.with? "qt" and "qt5"
+    onoe "Error! You cannot use both qt and qt5 option together!"
+  end 
   
   # dependencies
   depends_on "cmake" => :build
@@ -95,11 +99,9 @@ class Kvs < Formula
 
     if build.with? "qt5" 
       s += <<-EOS.undent
-
-        if you want to use find_papckage(Qt5XXXXX) in your cmake project, 
-        you should add -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5 to enable 
-        that feature.
-
+        if you want to use kvs with qt5 in your cmake project, 
+        you probably need to add -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5
+        when you do 'cmake path/to/your/cmake_project'
       EOS
     end
     #s += "Some issue only on older systems" if MacOS.version < :mountain_lion
